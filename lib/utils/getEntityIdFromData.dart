@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cozy_world_app/protos/instance.pb.dart';
 import 'package:flutter/material.dart';
 
 int getEntityIdFromSnapshot(AsyncSnapshot<dynamic> snapshot) {
@@ -7,11 +8,16 @@ int getEntityIdFromSnapshot(AsyncSnapshot<dynamic> snapshot) {
   return getEntityIdFromData(snapshot.data);
 }
 
-int getEntityIdFromData(String jsonString) {
-  // Decode the JSON string into a Map
-  Map<String, dynamic> data = jsonDecode(jsonString);
+int getEntityIdFromData(List<int> data) {
+  InstanceStreamResponse response = InstanceStreamResponse.fromBuffer(data);
 
+  if (!response.hasConnectionCommand()) {
+    return -1;
+  }
+
+  InstanceStreamResponse_ConnectionCommand connectionCommand =
+      response.connectionCommand;
   // Extract the entityId and return it
   // This assumes that the JSON always contains a valid entityId field
-  return data['entityId'];
+  return connectionCommand.entityId;
 }

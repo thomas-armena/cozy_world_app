@@ -1,15 +1,21 @@
 import 'package:cozy_world_app/constants.dart';
 import 'package:cozy_world_app/player.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'dart:ui';
 
-class CozyGame extends FlameGame {
+import 'package:flame/input.dart';
+
+typedef MoveToCallback = void Function(Vector2 position);
+
+class CozyGame extends FlameGame with TapDetector {
   late Player player;
 
-  int entityId;
+  final int entityId;
+  final MoveToCallback onMoveTo;
 
-  CozyGame(this.entityId);
+  CozyGame({required this.onMoveTo, required this.entityId});
 
   @override
   Future<void> onLoad() async {
@@ -46,5 +52,12 @@ class CozyGame extends FlameGame {
     super.render(canvas);
     // Render the grid
     drawGrid(canvas);
+  }
+
+  @override
+  void onTapUp(TapUpInfo info) {
+    // Handle tap up event
+    Vector2 vector = info.eventPosition.global / gridSize;
+    this.onMoveTo(vector);
   }
 }

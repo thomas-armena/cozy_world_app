@@ -1,4 +1,6 @@
 import 'package:cozy_world_app/game.dart';
+import 'package:cozy_world_app/protos/instance.pb.dart';
+import 'package:cozy_world_app/protos/math.pb.dart';
 import 'package:cozy_world_app/utils/getEntityIdFromData.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -48,46 +50,21 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (context, snapshot) {
           int entityId = getEntityIdFromSnapshot(snapshot);
           print(entityId);
-          return GameWidget(game: CozyGame(entityId));
+          return GameWidget(
+              game: CozyGame(entityId: entityId, onMoveTo: this._moveTo));
         },
       )),
     );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: Text(widget.title),
-  //     ),
-  //     body: Padding(
-  //       padding: const EdgeInsets.all(20),
-  //       child: Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           Form(
-  //             child: TextFormField(
-  //               controller: _controller,
-  //               decoration: const InputDecoration(labelText: 'Send a message'),
-  //             ),
-  //           ),
-  //           const SizedBox(height: 24),
-  //           StreamBuilder(
-  //             stream: _channel.stream,
-  //             builder: (context, snapshot) {
-  //               return Text(snapshot.hasData ? '${snapshot.data}' : '');
-  //             },
-  //           )
-  //         ],
-  //       ),
-  //     ),
-  //     floatingActionButton: FloatingActionButton(
-  //       onPressed: _sendMessage,
-  //       tooltip: 'Send message',
-  //       child: const Icon(Icons.send),
-  //     ), // This trailing comma makes auto-formatting nicer for build methods.
-  //   );
-  // }
+  void _moveTo(Vector2 vector) {
+    var obj = InstanceStreamRequest.create();
+    obj.moveToCommand = InstanceStreamRequest_MoveToCommand(
+        position: Vec2(x: vector.x, y: vector.y));
+    var data = obj.writeToBuffer();
+    print(data);
+    _channel.sink.add(data);
+  }
 
   void _sendMessage() {
     if (_controller.text.isNotEmpty) {
