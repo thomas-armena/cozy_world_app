@@ -1,4 +1,5 @@
 import 'package:cozy_world_app/game.dart';
+import 'package:cozy_world_app/utils/getEntityIdFromData.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -42,8 +43,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: GameWidget(game: CozyGame()),
-      ),
+          body: StreamBuilder(
+        stream: _channel.stream,
+        builder: (context, snapshot) {
+          int entityId = getEntityIdFromSnapshot(snapshot);
+          print(entityId);
+          return GameWidget(game: CozyGame(entityId));
+        },
+      )),
     );
   }
 

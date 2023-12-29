@@ -1,22 +1,61 @@
+import 'package:cozy_world_app/constants.dart';
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'dart:ui';
 
+class Player extends PositionComponent {
+  Player(Vector2 position, Vector2 size)
+      : super(position: position, size: size);
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    final paint = Paint()..color = Color.fromARGB(255, 254, 92, 92);
+    canvas.drawRect(size.toRect(), paint);
+  }
+}
+
 class CozyGame extends FlameGame {
+  late Player player;
+
+  int entityId;
+
+  CozyGame(this.entityId);
+
   @override
   Future<void> onLoad() async {
-    // Initialize your game here
+    super.onLoad();
+
+    // Create the player
+    player = Player(Vector2(100, 100), Vector2.all(gridSize));
+    add(player);
+
+    // Make the camera follow the player
+    camera.follow(player);
   }
 
   @override
   void update(double dt) {
+    super.update(dt);
     // Update your game state
+  }
+
+  void drawGrid(Canvas canvas) {
+    final paint = Paint()
+      ..color = Color(0xFF00FF00)
+      ..style = PaintingStyle.stroke;
+
+    for (double x = 0; x < size.x; x += gridSize) {
+      for (double y = 0; y < size.y; y += gridSize) {
+        canvas.drawRect(Rect.fromLTWH(x, y, gridSize, gridSize), paint);
+      }
+    }
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    final rect = Rect.fromLTWH(100, 100, 100, 100);
-    final paint = Paint()..color = Color.fromARGB(255, 231, 53, 53);
-    canvas.drawRect(rect, paint);
+    // Render the grid
+    drawGrid(canvas);
   }
 }
