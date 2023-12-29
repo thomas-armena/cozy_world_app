@@ -1,1 +1,1 @@
-const double gridSize = 50;
+const double gridSize = 100;

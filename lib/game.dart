@@ -16,7 +16,7 @@ class CozyGame extends FlameGame {
     super.onLoad();
 
     // Create the player
-    player = Player(Vector2(100, 100), Vector2.all(gridSize));
+    player = Player(Vector2(gridSize, gridSize), Vector2.all(gridSize));
     add(player);
 
     // Make the camera follow the player
