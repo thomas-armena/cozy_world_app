@@ -1,3 +1,5 @@
+import 'package:cozy_world_app/game.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -38,38 +40,47 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+    return MaterialApp(
+      home: Scaffold(
+        body: GameWidget(game: CozyGame()),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Form(
-              child: TextFormField(
-                controller: _controller,
-                decoration: const InputDecoration(labelText: 'Send a message'),
-              ),
-            ),
-            const SizedBox(height: 24),
-            StreamBuilder(
-              stream: _channel.stream,
-              builder: (context, snapshot) {
-                return Text(snapshot.hasData ? '${snapshot.data}' : '');
-              },
-            )
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _sendMessage,
-        tooltip: 'Send message',
-        child: const Icon(Icons.send),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     appBar: AppBar(
+  //       title: Text(widget.title),
+  //     ),
+  //     body: Padding(
+  //       padding: const EdgeInsets.all(20),
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Form(
+  //             child: TextFormField(
+  //               controller: _controller,
+  //               decoration: const InputDecoration(labelText: 'Send a message'),
+  //             ),
+  //           ),
+  //           const SizedBox(height: 24),
+  //           StreamBuilder(
+  //             stream: _channel.stream,
+  //             builder: (context, snapshot) {
+  //               return Text(snapshot.hasData ? '${snapshot.data}' : '');
+  //             },
+  //           )
+  //         ],
+  //       ),
+  //     ),
+  //     floatingActionButton: FloatingActionButton(
+  //       onPressed: _sendMessage,
+  //       tooltip: 'Send message',
+  //       child: const Icon(Icons.send),
+  //     ), // This trailing comma makes auto-formatting nicer for build methods.
+  //   );
+  // }
 
   void _sendMessage() {
     if (_controller.text.isNotEmpty) {
