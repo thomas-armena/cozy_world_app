@@ -36,10 +36,10 @@ func (w *WebsocketClient) AssignEntityId(id int32) {
 	log.Printf("Assigning entity id: %v\n", id)
 	w.entityId = id
 
-	command := &cpb.InstanceStreamResponse_ConnectionCommand{
-		EntityId: id,
-	}
-	data, _ := proto.Marshal(command) // Handle error?
+	res := &cpb.InstanceStreamResponse{Command: &cpb.InstanceStreamResponse_ConnectionCommand_{
+		ConnectionCommand: &cpb.InstanceStreamResponse_ConnectionCommand{EntityId: id},
+	}}
+	data, _ := proto.Marshal(res) // Handle error?
 
 	w.Write(data)
 }
