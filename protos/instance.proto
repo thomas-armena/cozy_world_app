@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package cozyworld.protos;
+
+import "math.proto";
+
+option go_package = "github.com/le-michael/cozyworld/protos";
+
+message InstanceStreamRequest {
+	oneof command {
+		MoveToCommand move_to_command = 1;
+	}
+
+	message MoveToCommand {
+		Vec2 position = 1;
+	}
+}
+
+message InstanceStreamResponse {
+	oneof command {
+		ConnectionCommand connection_command = 1;	
+	}
+
+	message ConnectionCommand {
+		// The entity id associated with this client.
+		int32 entity_id = 1;
+	}
+}

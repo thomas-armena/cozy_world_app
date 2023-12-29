@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package cozyworld.protos;
+
+option go_package = "github.com/le-michael/cozyworld/protos";
+
+message Vec2 {
+	double x = 1;
+	double y = 2;
+}
