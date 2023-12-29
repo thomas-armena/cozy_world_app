@@ -1,19 +1,8 @@
 import 'package:cozy_world_app/constants.dart';
+import 'package:cozy_world_app/player.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'dart:ui';
-
-class Player extends PositionComponent {
-  Player(Vector2 position, Vector2 size)
-      : super(position: position, size: size);
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    final paint = Paint()..color = Color.fromARGB(255, 254, 92, 92);
-    canvas.drawRect(size.toRect(), paint);
-  }
-}
 
 class CozyGame extends FlameGame {
   late Player player;
