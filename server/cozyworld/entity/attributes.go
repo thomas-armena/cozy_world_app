@@ -2,11 +2,14 @@ package entity
 
 import (
 	"github.com/go-gl/mathgl/mgl64"
+
+	cpb "github.com/le-michael/cozyworld/protos"
 )
 
 type Entity interface {
-	EntityId() int64
-	AssignEntityId(id int64)
+	EntityId() int32
+	AssignEntityId(id int32)
+	ToProto() *cpb.Entity
 }
 
 type Position interface {
@@ -14,5 +17,5 @@ type Position interface {
 }
 
 type Movable interface {
-	MoveTo(dest mgl64.Vec2)
+	MoveTo(currUsec int64, dest mgl64.Vec2)
 }

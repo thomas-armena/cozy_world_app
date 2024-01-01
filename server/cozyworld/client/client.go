@@ -1,7 +1,6 @@
 package client
 
 import (
-	"log"
 	"net"
 
 	"github.com/gobwas/ws"
@@ -12,8 +11,10 @@ import (
 )
 
 type Client interface {
-	Write(data []byte)
-	AssignEntityId(id int32)
+	Write([]byte)
+	AssignEntityId(int32)
+
+	EntityId() int32
 }
 
 type WebsocketClient struct {
@@ -32,14 +33,19 @@ func (w *WebsocketClient) Write(data []byte) {
 	wsutil.WriteServerMessage(w.conn, ws.OpBinary, data)
 }
 
-func (w *WebsocketClient) AssignEntityId(id int32) {
-	log.Printf("Assigning entity id: %v\n", id)
-	w.entityId = id
+func (w *WebsocketClient) AssignEntityId(entityId int32) {
+	w.entityId = entityId 
 
 	res := &cpb.InstanceStreamResponse{Command: &cpb.InstanceStreamResponse_ConnectionCommand_{
-		ConnectionCommand: &cpb.InstanceStreamResponse_ConnectionCommand{EntityId: id},
+		ConnectionCommand: &cpb.InstanceStreamResponse_ConnectionCommand{
+			EntityId: entityId,
+		},
 	}}
 	data, _ := proto.Marshal(res) // Handle error?
 
 	w.Write(data)
+}
+
+func (w *WebsocketClient) EntityId() int32 {
+	return w.entityId
 }

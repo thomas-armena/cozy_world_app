@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package cozyworld.protos;
+
+import "math.proto";
+
+option go_package = "github.com/le-michael/cozyworld/protos";
+
+message Motion {
+	Vec2 start = 1;
+	int64 start_usec = 2;
+	double speed = 3;
+	Vec2 dest = 4;
+}
+
+message Entity {
+	int32 entity_id = 1;
+
+	oneof entity {
+		PlayerEntity player_entity = 2;
+	}
+
+	message PlayerEntity {
+		Motion motion = 1;
+	}
+}
+

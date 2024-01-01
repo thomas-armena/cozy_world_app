@@ -3,6 +3,7 @@ syntax = "proto3";
 package cozyworld.protos;
 
 import "math.proto";
+import "entity.proto";
 
 option go_package = "github.com/le-michael/cozyworld/protos";
 
@@ -12,17 +13,25 @@ message InstanceStreamRequest {
 	}
 
 	message MoveToCommand {
-		Vec2 position = 1;
+		Vec2 dest = 1;
 	}
 }
 
 message InstanceStreamResponse {
 	oneof command {
 		ConnectionCommand connection_command = 1;	
+		UpdateEntityCommand update_entity_command = 2;
 	}
 
 	message ConnectionCommand {
-		// The entity id associated with this client.
+		// The entity id associated with the player.
 		int32 entity_id = 1;
+
+		// The entities loaded in the instance at the time of connection.
+		repeated Entity entities  = 2;
+	}
+
+	message UpdateEntityCommand {
+		Entity entity = 1;
 	}
 }

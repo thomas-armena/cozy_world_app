@@ -30,7 +30,7 @@ func Query[T any](e *EntityPool) []T {
 	return res
 }
 
-func QueryById[T any](e *EntityPool, id int64) (T, error) {
+func QueryById[T any](e *EntityPool, id int32) (T, error) {
 	// Empty value if not found. Is there a better approach here?
 	var empt T
 

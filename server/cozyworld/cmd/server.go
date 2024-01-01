@@ -10,6 +10,7 @@ import (
 	"github.com/gobwas/ws"
 	"github.com/gobwas/ws/wsutil"
 	"github.com/le-michael/cozyworld/client"
+	"github.com/le-michael/cozyworld/clock"
 	"github.com/le-michael/cozyworld/instance"
 	"google.golang.org/protobuf/proto"
 
@@ -20,14 +21,13 @@ const (
 	port = 8080
 )
 
-var world = instance.NewInstance(0, 0, 1, 1)
+var world = instance.NewInstance(clock.NewSystemClock(), 0, 0, 5, 5)
 
 func handleWsConnection(conn net.Conn) {
 	defer conn.Close()
 
 	client := client.NewWebsocketClient(conn)
-	entityId := world.AddClient(client)
-	client.AssignEntityId(entityId)
+	world.AddClient(client)
 
 	state := ws.StateServerSide
 	r := wsutil.NewReader(conn, state)
@@ -49,6 +49,10 @@ func handleWsConnection(conn net.Conn) {
 			log.Printf("Failed to Unmarshal request proto: %v", err)
 			return
 		}
+
+		// TODO: Handle more commands
+		mc := req.GetMoveToCommand()
+		world.HandleMoveToCommand(client.EntityId(), mc)
 
 		log.Printf("Request: %v\n", req.String())
 	}
